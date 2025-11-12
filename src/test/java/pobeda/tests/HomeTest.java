@@ -66,4 +66,59 @@ public class HomeTest extends BaseTest {
                 .isEqualTo(DD_USEFUL);
 
     }
+
+    @Test
+    @DisplayName("Задание №2. Инициирование поиска")
+    void checkFlyingTicketSearch() {
+
+        homePage = new HomePage(driver, wait);
+        homePage.open();
+
+        homePage.moveToFormTicketSearch();
+
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(homePage.isDisplayed_inputToFormTicketSearch()).isTrue();
+        softly.assertThat(homePage.isDisplayed_inputFromFormTicketSearch()).isTrue();
+        softly.assertThat(homePage.isDisplayed_inputDepartureFormTicketSearch()).isTrue();
+        softly.assertThat(homePage.isDisplayed_inputReturnFormTicketSearch()).isTrue();
+        softly.assertAll();
+
+        homePage.setInputFromFormTicketSearch("Москва");
+        homePage.setInputToFormTicketSearch("Санкт-Петербург");
+
+        homePage.buttonSearch();
+
+        Assertions.assertThat(homePage.containerDepartureFormTicketSearchDataFailed())
+                .as("Поле \"Туда\" подсвечено красной рамкой")
+                .isTrue();
+    }
+
+    @Test
+    @DisplayName("Задание №3. Результаты поиска")
+    void checkSearchResult() {
+
+        homePage = new HomePage(driver, wait);
+        homePage.open();
+
+        homePage.moveToButtonManageBooking();
+
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(homePage.isDisplayed_buttonSearch()).isTrue();
+        softly.assertThat(homePage.isDisplayed_inputClientLastNameManageBooking()).isTrue();
+        softly.assertThat(homePage.isDisplayed_inputBookingNumberManageBooking()).isTrue();
+        softly.assertAll();
+
+        homePage.setInputClientLastNameManageBooking("XXXXXX");
+        homePage.setInputBookingNumberManageBooking("Qwerty");
+
+        homePage.buttonSearch();
+
+        Assertions.assertThat(homePage.containerBookingNumberSearchDataFailed())
+                .as("Поле \"Номер бронирования или билета\" подсвечено красной рамкой")
+                .isTrue();
+
+        Assertions.assertThat(homePage.isBookingNumberHasErrorText())
+                .as("Сообщение об ошибке под полем - \"Некорректный номер\"")
+                .isTrue();
+    }
 }
