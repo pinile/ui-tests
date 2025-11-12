@@ -1,5 +1,6 @@
 package pobeda.pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -18,6 +19,35 @@ public class HomePage {
     @FindBy(css = "img")
     WebElement logo;
 
+    @FindBy(xpath = "//form[.//input[@placeholder=\"Откуда\"]]")
+    WebElement formTicketSearch;
+
+    @FindBy(xpath = "//input[@placeholder=\"Куда\"]")
+    WebElement inputToFormTicketSearch;
+
+    @FindBy(css = "div[data-popper-placement]")
+    WebElement dropDownToFormTicketSearch;
+
+    @FindBy(xpath = "//input[@placeholder=\"Откуда\"]")
+    WebElement inputFromFormTicketSearch;
+
+    @FindBy(css = "div[data-popper-placement]")
+    WebElement dropDownFromFormTicketSearch;
+
+    @FindBy(xpath = "//div[@role=\"menuitem\"]//div[1]")
+    WebElement firstItemDropDownTicketSearch;
+
+    @FindBy(xpath = "//input[@placeholder=\"Туда\"]")
+    WebElement inputDepartureFormTicketSearch;
+
+    @FindBy(xpath = "//input[@placeholder=\"Туда\"]/..")
+    WebElement containerDepartureFormTicketSearch;
+
+    @FindBy(xpath = "//input[@placeholder=\"Обратно\"]")
+    WebElement inputReturnFormTicketSearch;
+
+    @FindBy(xpath = "//span[text()=\"Поиск\"]")
+    WebElement buttonTicketSearch;
 
     @FindBy(xpath = "//a[@href=\"/information\"]")
     WebElement triggerInformation;
@@ -104,4 +134,76 @@ public class HomePage {
         return dropDownInformationCompany.getAttribute("textContent");
     }
 
+    public void moveToFormTicketSearch() {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(formTicketSearch).perform();
+    }
+
+    public void setInputToFormTicketSearch(String input) {
+        inputToFormTicketSearch.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        inputToFormTicketSearch.sendKeys(Keys.DELETE);
+        inputToFormTicketSearch.sendKeys(input);
+
+        wait.until(ExpectedConditions.visibilityOf(dropDownToFormTicketSearch));
+
+        inputToFormTicketSearch.sendKeys(Keys.ENTER);
+
+        firstItemDropDownTicketSearch.click();
+    }
+
+    public void setInputFromFormTicketSearch(String input) {
+        inputFromFormTicketSearch.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        inputFromFormTicketSearch.sendKeys(Keys.DELETE);
+
+        inputFromFormTicketSearch.sendKeys(input);
+
+        wait.until(ExpectedConditions.visibilityOf(dropDownFromFormTicketSearch));
+
+        inputFromFormTicketSearch.sendKeys(Keys.ENTER);
+        firstItemDropDownTicketSearch.click();
+    }
+
+    public void setInputDepartureFormTicketSearch(String input) {
+        inputDepartureFormTicketSearch.clear();
+        inputDepartureFormTicketSearch.sendKeys(input);
+    }
+
+    public void setInputReturnFormTicketSearch(String input) {
+        inputReturnFormTicketSearch.clear();
+        inputReturnFormTicketSearch.sendKeys(input);
+    }
+
+    public boolean isVisible_inputToFormTicketSearch() {
+        return inputToFormTicketSearch.isDisplayed();
+    }
+
+    public boolean isVisible_inputFromFormTicketSearch() {
+        return inputFromFormTicketSearch.isDisplayed();
+    }
+
+    public boolean isVisible_inputDepartureFormTicketSearch() {
+        return inputDepartureFormTicketSearch.isDisplayed();
+    }
+
+    public boolean isVisible_inputReturnFormTicketSearch() {
+        return inputReturnFormTicketSearch.isDisplayed();
+    }
+
+    public void ticketSearch() {
+        buttonTicketSearch.click();
+    }
+
+    public String getContainerDepartureFormTicketSearchBorderColor() {
+        return wait.until(driver ->
+                "true".equals(containerDepartureFormTicketSearch.getAttribute("data-failed"))
+                        ? containerDepartureFormTicketSearch.getCssValue("border-color")
+                        : null
+        );
+    }
+
+    public boolean containerDepartureFormTicketSearchDataFailed() {
+        return wait.until(driver ->
+                "true".equals(containerDepartureFormTicketSearch.getAttribute("data-failed")) ? true : null
+        );
+    }
 }
