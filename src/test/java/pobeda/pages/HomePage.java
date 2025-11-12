@@ -47,7 +47,7 @@ public class HomePage {
     WebElement inputReturnFormTicketSearch;
 
     @FindBy(xpath = "//span[text()=\"Поиск\"]")
-    WebElement buttonTicketSearch;
+    WebElement buttonSearch;
 
     @FindBy(xpath = "//a[@href=\"/information\"]")
     WebElement triggerInformation;
@@ -80,7 +80,23 @@ public class HomePage {
     WebElement buttonOnlineCheckInEnglish;
 
     @FindBy(xpath = "//span[text()=\"Manage my booking\"]")
-    WebElement buttonManageMyBookingEnglish;
+    WebElement buttonManageBookingEnglish;
+
+    @FindBy(xpath = "//span[text()=\"Управление бронированием\"]/..")
+    WebElement buttonManageBooking;
+
+    @FindBy(xpath = "//input[@placeholder=\"Фамилия клиента\"]")
+    WebElement inputClientLastNameManageBooking;
+
+    @FindBy(xpath = "//input[@placeholder=\"Номер бронирования или билета\"]")
+    WebElement inputBookingNumberManageBooking;
+
+    @FindBy(xpath = "//input[@placeholder=\"Номер бронирования или билета\"]/..")
+    WebElement containerBookingNumberManageBooking;
+
+    @FindBy(xpath = "//input[@placeholder=\"Номер бронирования или билета\"]/../following-sibling::div")
+    WebElement bookingNumberErrorText;
+
 
     public HomePage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
@@ -119,7 +135,7 @@ public class HomePage {
     }
 
     public String getText_buttonManageMyBookingEnglish() {
-        return buttonManageMyBookingEnglish.getAttribute("textContent");
+        return buttonManageBookingEnglish.getAttribute("textContent");
     }
 
     public String getText_dropDownInformationFlight() {
@@ -137,6 +153,12 @@ public class HomePage {
     public void moveToFormTicketSearch() {
         Actions actions = new Actions(driver);
         actions.moveToElement(formTicketSearch).perform();
+    }
+
+    public void moveToButtonManageBooking() {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(buttonManageBooking).perform();
+        buttonManageBooking.click();
     }
 
     public void setInputToFormTicketSearch(String input) {
@@ -173,25 +195,52 @@ public class HomePage {
         inputReturnFormTicketSearch.sendKeys(input);
     }
 
-    public boolean isVisible_inputToFormTicketSearch() {
+    public boolean isDisplayed_inputToFormTicketSearch() {
         return inputToFormTicketSearch.isDisplayed();
     }
 
-    public boolean isVisible_inputFromFormTicketSearch() {
+    public boolean isDisplayed_inputFromFormTicketSearch() {
         return inputFromFormTicketSearch.isDisplayed();
     }
 
-    public boolean isVisible_inputDepartureFormTicketSearch() {
+    public boolean isDisplayed_inputDepartureFormTicketSearch() {
         return inputDepartureFormTicketSearch.isDisplayed();
     }
 
-    public boolean isVisible_inputReturnFormTicketSearch() {
+    public boolean isDisplayed_inputReturnFormTicketSearch() {
         return inputReturnFormTicketSearch.isDisplayed();
     }
 
-    public void ticketSearch() {
-        buttonTicketSearch.click();
+    public void buttonSearch() {
+        buttonSearch.click();
     }
+
+    public boolean isDisplayed_inputClientLastNameManageBooking() {
+        return inputClientLastNameManageBooking.isDisplayed();
+    }
+
+    public boolean isDisplayed_inputBookingNumberManageBooking() {
+        return inputBookingNumberManageBooking.isDisplayed();
+    }
+
+    public boolean isDisplayed_buttonSearch() {
+        return buttonSearch.isDisplayed();
+    }
+
+    public void setInputClientLastNameManageBooking(String input) {
+        inputClientLastNameManageBooking.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        inputClientLastNameManageBooking.sendKeys(Keys.DELETE);
+        inputClientLastNameManageBooking.sendKeys(input);
+        inputClientLastNameManageBooking.sendKeys(Keys.ENTER);
+    }
+
+    public void setInputBookingNumberManageBooking(String input) {
+        inputBookingNumberManageBooking.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        inputBookingNumberManageBooking.sendKeys(Keys.DELETE);
+        inputBookingNumberManageBooking.sendKeys(input);
+        inputBookingNumberManageBooking.sendKeys(Keys.ENTER);
+    }
+
 
     public String getContainerDepartureFormTicketSearchBorderColor() {
         return wait.until(driver ->
@@ -206,4 +255,18 @@ public class HomePage {
                 "true".equals(containerDepartureFormTicketSearch.getAttribute("data-failed")) ? true : null
         );
     }
+
+    public boolean containerBookingNumberSearchDataFailed() {
+        return wait.until(driver ->
+                "true".equals(containerBookingNumberManageBooking.getAttribute("data-failed")) ? true : null
+        );
+            }
+
+    public boolean isBookingNumberHasErrorText() {
+        return wait.until(driver ->
+                "Некорректный номер".equals(bookingNumberErrorText.getAttribute("textContent")) ? true : null
+        );
+    }
+
+
 }
