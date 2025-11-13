@@ -59,27 +59,27 @@ public class HomePage {
         triggerInformation.hover();
     }
 
-    public String getText_buttonTicketSearchEnglish() {
+    public String getTextButtonTicketSearchEnglish() {
         return buttonTicketSearchEng.shouldBe().getAttribute("textContent");
     }
 
-    public String getText_buttonOnlineCheckInEnglish() {
+    public String getTextButtonOnlineCheckInEnglish() {
         return buttonOnlineCheckInEng.shouldBe(exist).getAttribute("textContent");
     }
 
-    public String getText_buttonManageMyBookingEnglish() {
+    public String getTextButtonManageMyBookingEnglish() {
         return buttonManageBookingEng.shouldBe(exist).getAttribute("textContent");
     }
 
-    public String getText_dropDownInformationFlight() {
+    public String getTextDropDownInformationFlight() {
         return ddFlight.shouldBe(exist).getAttribute("textContent");
     }
 
-    public String getText_dropDownInformationUseful() {
+    public String getTextDropDownInformationUseful() {
         return ddUseful.shouldBe(exist).getAttribute("textContent");
     }
 
-    public String getText_dropDownInformationCompany() {
+    public String getTextDropDownInformationCompany() {
         return ddCompany.shouldBe(exist).getAttribute("textContent");
     }
 

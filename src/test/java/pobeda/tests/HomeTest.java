@@ -26,13 +26,13 @@ public class HomeTest extends BaseTest {
         homePage.setEnglishLanguage();
 
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(homePage.getText_buttonOnlineCheckInEnglish())
+        softly.assertThat(homePage.getTextButtonOnlineCheckInEnglish())
                 .as("Кнопка онлайн-регистрации")
                 .isEqualTo(ONLINE_CHECK_IN);
-        softly.assertThat(homePage.getText_buttonTicketSearchEnglish())
+        softly.assertThat(homePage.getTextButtonTicketSearchEnglish())
                 .as("Кнопка поиска билета")
                 .isEqualTo(TICKET_SEARCH);
-        softly.assertThat(homePage.getText_buttonManageMyBookingEnglish())
+        softly.assertThat(homePage.getTextButtonManageMyBookingEnglish())
                 .as("Кнопка управления бронированием")
                 .isEqualTo(MANAGE_MY_BOOKING);
         softly.assertAll();
@@ -45,13 +45,13 @@ public class HomeTest extends BaseTest {
 
         homePage.hoverInformationMenu();
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(homePage.getText_dropDownInformationCompany())
+        softly.assertThat(homePage.getTextDropDownInformationCompany())
                 .as("О компании")
                 .isEqualTo(DD_COMPANY);
-        softly.assertThat(homePage.getText_dropDownInformationFlight())
+        softly.assertThat(homePage.getTextDropDownInformationFlight())
                 .as("Подготовка к полету")
                 .isEqualTo(DD_FLIGHT);
-        softly.assertThat(homePage.getText_dropDownInformationUseful())
+        softly.assertThat(homePage.getTextDropDownInformationUseful())
                 .as("Полезная информация")
                 .isEqualTo(DD_USEFUL);
     }
