@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("io.qameta.allure") version "3.0.1"
 }
 
 group = "ru.vtb.pptc"
@@ -14,6 +15,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.assertj:assertj-core:3.27.3")
     testImplementation("com.codeborne:selenide:7.12.0")
+    testImplementation("io.qameta.allure:allure-junit5:2.29.1")
+    testImplementation("io.qameta.allure:allure-selenide:2.30.0")
 }
 
 tasks.test {
@@ -21,4 +24,5 @@ tasks.test {
     systemProperty("selenide.browser", "chrome")
     systemProperty("selenide.headless", "false")
     maxParallelForks = (Runtime.getRuntime().availableProcessors() /2 ).coerceAtLeast(1)
+    finalizedBy("allureReport")
 }

@@ -1,17 +1,21 @@
 package pobeda.tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.*;
 import pobeda.base.BaseTest;
 import pobeda.pages.HomePage;
 
+@Epic("pobeda.aero")
 public class HomeTest extends BaseTest {
     final String TICKET_SEARCH = "Ticket search";
     final String ONLINE_CHECK_IN = "Online check-in";
     final String MANAGE_MY_BOOKING = "Manage my booking";
 
-    final String DD_FLIGHT = "Подготовка к полету";
+    final String DD_FLIGHT = "Подготовка к полёту";
     final String DD_USEFUL = "Полезная информация";
     final String DD_COMPANY = "О компании";
 
@@ -19,6 +23,8 @@ public class HomeTest extends BaseTest {
 
     @Test
     @DisplayName("Проверка наличия баннера 'Полетели в Калининград!'")
+    @Description("Проверка наличия баннера 'Полетели в Калининград!'")
+    @Feature("Задание №0")
     void checkKaliningradBanner() {
         homePage.openPage();
         Assertions.assertThat(homePage.isAdGoToKaliningradVisible()).isTrue();
@@ -40,6 +46,8 @@ public class HomeTest extends BaseTest {
 
     @Test
     @DisplayName("Задание №1. Всплывающее окно")
+    @Description("Проверка dd-menu 'Информация'")
+    @Feature("Задание №1")
     void checkDropDownInformation() {
         homePage.openPage();
 
@@ -54,10 +62,13 @@ public class HomeTest extends BaseTest {
         softly.assertThat(homePage.getTextDropDownInformationUseful())
                 .as("Полезная информация")
                 .isEqualTo(DD_USEFUL);
+        softly.assertAll();
     }
 
     @Test
     @DisplayName("Задание №2. Инициирование поиска")
+    @Description("Проверка поиска билета без указания даты вылета")
+    @Feature("Задание №2")
     void checkFlyingTicketSearch() {
         homePage.openPage();
 
@@ -75,6 +86,8 @@ public class HomeTest extends BaseTest {
 
     @Test
     @DisplayName("Задание №3. Результаты поиска")
+    @Description("Проверка поиска бронирования с невалидными данными")
+    @Feature("Задание №3")
     void checkSearchResult() {
         homePage.openPage()
                 .hoverManageBooking()
@@ -88,5 +101,26 @@ public class HomeTest extends BaseTest {
         Assertions.assertThat(homePage.hasBookingErrorText())
                 .as("Сообщение об ошибке под полем - 'Некорректный номер'")
                 .isTrue();
+    }
+
+    @Test
+    @DisplayName("Задание №1. Всплывающее окно")
+    @Description("BROKEN. Проверка dd-menu 'Информация'")
+    @Feature("Задание №1")
+    void checkBrokenDropDownInformation() {
+        homePage.openPage();
+
+        homePage.hoverInformationMenu();
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(homePage.getTextDropDownInformationCompany())
+                .as("О компании")
+                .isEqualTo("broken");
+        softly.assertThat(homePage.getTextDropDownInformationFlight())
+                .as("Подготовка к полету")
+                .isEqualTo(DD_FLIGHT);
+        softly.assertThat(homePage.getTextDropDownInformationUseful())
+                .as("Полезная информация")
+                .isEqualTo(DD_USEFUL);
+        softly.assertAll();
     }
 }
