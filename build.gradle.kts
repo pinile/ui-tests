@@ -13,9 +13,12 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.assertj:assertj-core:3.27.3")
-    testImplementation("org.seleniumhq.selenium:selenium-java:4.38.0")
+    testImplementation("com.codeborne:selenide:7.12.0")
 }
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty("selenide.browser", "chrome")
+    systemProperty("selenide.headless", "false")
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() /2 ).coerceAtLeast(1)
 }

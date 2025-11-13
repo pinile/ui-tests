@@ -2,8 +2,7 @@ package pobeda.tests;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import pobeda.base.BaseTest;
 import pobeda.pages.HomePage;
 
@@ -16,28 +15,23 @@ public class HomeTest extends BaseTest {
     final String DD_USEFUL = "Полезная информация";
     final String DD_COMPANY = "О компании";
 
-    HomePage homePage;
+    HomePage homePage = new HomePage();
 
     @Test
     @DisplayName("Проверка наличия баннера 'Полетели в Калининград!'")
     void checkKaliningradBanner() {
-        homePage = new HomePage(driver, wait);
-        homePage.open();
-
+        homePage.openPage();
         Assertions.assertThat(homePage.isAdGoToKaliningradVisible()).isTrue();
 
         homePage.setEnglishLanguage();
 
         SoftAssertions softly = new SoftAssertions();
-
         softly.assertThat(homePage.getText_buttonOnlineCheckInEnglish())
                 .as("Кнопка онлайн-регистрации")
                 .isEqualTo(ONLINE_CHECK_IN);
-
         softly.assertThat(homePage.getText_buttonTicketSearchEnglish())
                 .as("Кнопка поиска билета")
                 .isEqualTo(TICKET_SEARCH);
-
         softly.assertThat(homePage.getText_buttonManageMyBookingEnglish())
                 .as("Кнопка управления бронированием")
                 .isEqualTo(MANAGE_MY_BOOKING);
@@ -47,78 +41,52 @@ public class HomeTest extends BaseTest {
     @Test
     @DisplayName("Задание №1. Всплывающее окно")
     void checkDropDownInformation() {
-        homePage = new HomePage(driver, wait);
-        homePage.open();
+        homePage.openPage();
 
-        homePage.moveToTriggerInformation();
+        homePage.hoverInformationMenu();
         SoftAssertions softly = new SoftAssertions();
-
         softly.assertThat(homePage.getText_dropDownInformationCompany())
                 .as("О компании")
                 .isEqualTo(DD_COMPANY);
-
         softly.assertThat(homePage.getText_dropDownInformationFlight())
                 .as("Подготовка к полету")
                 .isEqualTo(DD_FLIGHT);
-
         softly.assertThat(homePage.getText_dropDownInformationUseful())
                 .as("Полезная информация")
                 .isEqualTo(DD_USEFUL);
-
     }
 
     @Test
     @DisplayName("Задание №2. Инициирование поиска")
     void checkFlyingTicketSearch() {
+        homePage.openPage();
 
-        homePage = new HomePage(driver, wait);
-        homePage.open();
+        homePage.hoverFormTicketSearch();
 
-        homePage.moveToFormTicketSearch();
+        homePage.setFromCity("Москва");
+        homePage.setToCity("Санкт-Петербург");
 
-        SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(homePage.isDisplayed_inputToFormTicketSearch()).isTrue();
-        softly.assertThat(homePage.isDisplayed_inputFromFormTicketSearch()).isTrue();
-        softly.assertThat(homePage.isDisplayed_inputDepartureFormTicketSearch()).isTrue();
-        softly.assertThat(homePage.isDisplayed_inputReturnFormTicketSearch()).isTrue();
-        softly.assertAll();
+        homePage.clickSearch();
 
-        homePage.setInputFromFormTicketSearch("Москва");
-        homePage.setInputToFormTicketSearch("Санкт-Петербург");
-
-        homePage.buttonSearch();
-
-        Assertions.assertThat(homePage.containerDepartureFormTicketSearchDataFailed())
-                .as("Поле \"Туда\" подсвечено красной рамкой")
+        Assertions.assertThat(homePage.isDepartureFieldFailed())
+                .as("Поле 'Туда' подсвечено красной рамкой")
                 .isTrue();
     }
 
     @Test
     @DisplayName("Задание №3. Результаты поиска")
     void checkSearchResult() {
+        homePage.openPage()
+                .hoverManageBooking()
+                .setClientLastName("XXXXXX")
+                .setBookingNumber("Qwerty")
+                .clickSearch();
 
-        homePage = new HomePage(driver, wait);
-        homePage.open();
-
-        homePage.moveToButtonManageBooking();
-
-        SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(homePage.isDisplayed_buttonSearch()).isTrue();
-        softly.assertThat(homePage.isDisplayed_inputClientLastNameManageBooking()).isTrue();
-        softly.assertThat(homePage.isDisplayed_inputBookingNumberManageBooking()).isTrue();
-        softly.assertAll();
-
-        homePage.setInputClientLastNameManageBooking("XXXXXX");
-        homePage.setInputBookingNumberManageBooking("Qwerty");
-
-        homePage.buttonSearch();
-
-        Assertions.assertThat(homePage.containerBookingNumberSearchDataFailed())
-                .as("Поле \"Номер бронирования или билета\" подсвечено красной рамкой")
+        Assertions.assertThat(homePage.isBookingNumberFailed())
+                .as("Поле 'Номер бронирования или билета' подсвечено красной рамкой")
                 .isTrue();
-
-        Assertions.assertThat(homePage.isBookingNumberHasErrorText())
-                .as("Сообщение об ошибке под полем - \"Некорректный номер\"")
+        Assertions.assertThat(homePage.hasBookingErrorText())
+                .as("Сообщение об ошибке под полем - 'Некорректный номер'")
                 .isTrue();
     }
 }

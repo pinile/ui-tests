@@ -1,272 +1,143 @@
 package pobeda.pages;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import com.codeborne.selenide.SelenideElement;
+
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
 
 public class HomePage {
-    WebDriver driver;
-    WebDriverWait wait;
 
-    @FindBy(css = "header")
-    WebElement header;
+    private final SelenideElement header = $("header");
+    private final SelenideElement logo = $("img");
 
-    @FindBy(css = "img")
-    WebElement logo;
+    private final SelenideElement formTicketSearch = $x("//form[.//input[@placeholder='Откуда']]");
+    private final SelenideElement inputFrom = $x("//input[@placeholder='Откуда']");
+    private final SelenideElement inputTo = $x("//input[@placeholder='Куда']");
+    private final SelenideElement inputDeparture = $x("//input[@placeholder='Туда']");
+    private final SelenideElement inputReturn = $x("//input[@placeholder='Обратно']");
+    private final SelenideElement buttonSearch = $x("//span[text()='Поиск']");
 
-    @FindBy(xpath = "//form[.//input[@placeholder=\"Откуда\"]]")
-    WebElement formTicketSearch;
+    private final SelenideElement triggerInformation = $x("//a[@href='/information']");
+    private final SelenideElement ddFlight = $x("//a[@href='/information#flight']");
+    private final SelenideElement ddUseful = $x("//a[@href='/information#useful']");
+    private final SelenideElement ddCompany = $x("//a[@href='/information#company']");
 
-    @FindBy(xpath = "//input[@placeholder=\"Куда\"]")
-    WebElement inputToFormTicketSearch;
+    private final SelenideElement adButton9 = $x("//button[@data-idx='9']");
+    private final SelenideElement bannerKaliningrad = $x("//div[text()='Полетели в Калининград!']");
 
-    @FindBy(css = "div[data-popper-placement]")
-    WebElement dropDownToFormTicketSearch;
+    private final SelenideElement buttonLanguage = $x("//button[@type='button' and normalize-space(.)='РУС']");
+    private final SelenideElement menuEnglish = $x("//div[@role='menuitem' and text()='English']");
 
-    @FindBy(xpath = "//input[@placeholder=\"Откуда\"]")
-    WebElement inputFromFormTicketSearch;
+    private final SelenideElement buttonTicketSearchEng = $x("//span[text()='Ticket search']");
+    private final SelenideElement buttonOnlineCheckInEng = $x("//span[text()='Online check-in']");
+    private final SelenideElement buttonManageBookingEng = $x("//span[text()='Manage my booking']");
 
-    @FindBy(css = "div[data-popper-placement]")
-    WebElement dropDownFromFormTicketSearch;
+    private final SelenideElement buttonManageBooking = $x("//span[text()='Управление бронированием']/..");
+    private final SelenideElement inputClientLastName = $x("//input[@placeholder='Фамилия клиента']");
+    private final SelenideElement inputBookingNumber = $x("//input[@placeholder='Номер бронирования или билета']");
+    private final SelenideElement bookingNumberContainer = $x("//input[@placeholder='Номер бронирования или билета']/..");
+    private final SelenideElement bookingErrorText = $x("//input[@placeholder='Номер бронирования или билета']/../following-sibling::div");
 
-    @FindBy(xpath = "//div[@role=\"menuitem\"]//div[1]")
-    WebElement firstItemDropDownTicketSearch;
-
-    @FindBy(xpath = "//input[@placeholder=\"Туда\"]")
-    WebElement inputDepartureFormTicketSearch;
-
-    @FindBy(xpath = "//input[@placeholder=\"Туда\"]/..")
-    WebElement containerDepartureFormTicketSearch;
-
-    @FindBy(xpath = "//input[@placeholder=\"Обратно\"]")
-    WebElement inputReturnFormTicketSearch;
-
-    @FindBy(xpath = "//span[text()=\"Поиск\"]")
-    WebElement buttonSearch;
-
-    @FindBy(xpath = "//a[@href=\"/information\"]")
-    WebElement triggerInformation;
-
-    @FindBy(xpath = "//a[@href=\"/information#flight\"]")
-    WebElement dropDownInformationFlight;
-
-    @FindBy(xpath = "//a[@href=\"/information#useful\"]")
-    WebElement dropDownInformationUseful;
-
-    @FindBy(xpath = "//a[@href=\"/information#company\"]")
-    WebElement dropDownInformationCompany;
-
-    @FindBy(xpath = "//div[text()=\"Полетели в Калининград!\"]")
-    WebElement goToKaliningrad;
-
-    @FindBy(xpath = "//button[@data-idx=\"10\"]")
-    WebElement buttonAd10;
-
-    @FindBy(xpath = "//button[@type=\"button\" and normalize-space(.)=\"РУС\"]")
-    WebElement buttonLanguage;
-
-    @FindBy(xpath = "//div[@role=\"menuitem\" and text()=\"English\"]")
-    WebElement dropDownMenuItemEnglishLanguage;
-
-    @FindBy(xpath = "//span[text()=\"Ticket search\"]")
-    WebElement buttonTicketSearchEnglish;
-
-    @FindBy(xpath = "//span[text()=\"Online check-in\"]")
-    WebElement buttonOnlineCheckInEnglish;
-
-    @FindBy(xpath = "//span[text()=\"Manage my booking\"]")
-    WebElement buttonManageBookingEnglish;
-
-    @FindBy(xpath = "//span[text()=\"Управление бронированием\"]/..")
-    WebElement buttonManageBooking;
-
-    @FindBy(xpath = "//input[@placeholder=\"Фамилия клиента\"]")
-    WebElement inputClientLastNameManageBooking;
-
-    @FindBy(xpath = "//input[@placeholder=\"Номер бронирования или билета\"]")
-    WebElement inputBookingNumberManageBooking;
-
-    @FindBy(xpath = "//input[@placeholder=\"Номер бронирования или билета\"]/..")
-    WebElement containerBookingNumberManageBooking;
-
-    @FindBy(xpath = "//input[@placeholder=\"Номер бронирования или билета\"]/../following-sibling::div")
-    WebElement bookingNumberErrorText;
-
-
-    public HomePage(WebDriver driver, WebDriverWait wait) {
-        this.driver = driver;
-        this.wait = wait;
-        PageFactory.initElements(driver, this);
-    }
-
-    public void open() {
-        driver.get("https://www.flypobeda.ru/");
-        wait.until(ExpectedConditions.visibilityOf(header));
-        wait.until(ExpectedConditions.visibilityOf(logo));
+    public HomePage openPage() {
+        open("https://www.flypobeda.ru/");
+        header.shouldBe(visible);
+        logo.shouldBe(visible);
+        return this;
     }
 
     public boolean isAdGoToKaliningradVisible() {
-        buttonAd10.click();
-        wait.until(ExpectedConditions.visibilityOf(goToKaliningrad));
-        return goToKaliningrad.isDisplayed();
+        adButton9.shouldBe(visible).click();
+        return bannerKaliningrad.shouldBe(visible).isDisplayed();
     }
 
     public void setEnglishLanguage() {
         buttonLanguage.click();
-        dropDownMenuItemEnglishLanguage.click();
+        menuEnglish.click();
     }
 
-    public void moveToTriggerInformation() {
-        Actions actions = new Actions(driver);
-        actions.moveToElement(triggerInformation).perform();
+    public void hoverInformationMenu() {
+        triggerInformation.hover();
     }
 
     public String getText_buttonTicketSearchEnglish() {
-        return buttonTicketSearchEnglish.getAttribute("textContent");
+        return buttonTicketSearchEng.shouldBe().getAttribute("textContent");
     }
 
     public String getText_buttonOnlineCheckInEnglish() {
-        return buttonOnlineCheckInEnglish.getAttribute("textContent");
+        return buttonOnlineCheckInEng.shouldBe(exist).getAttribute("textContent");
     }
 
     public String getText_buttonManageMyBookingEnglish() {
-        return buttonManageBookingEnglish.getAttribute("textContent");
+        return buttonManageBookingEng.shouldBe(exist).getAttribute("textContent");
     }
 
     public String getText_dropDownInformationFlight() {
-        return dropDownInformationFlight.getAttribute("textContent");
+        return ddFlight.shouldBe(exist).getAttribute("textContent");
     }
 
     public String getText_dropDownInformationUseful() {
-        return dropDownInformationUseful.getAttribute("textContent");
+        return ddUseful.shouldBe(exist).getAttribute("textContent");
     }
 
     public String getText_dropDownInformationCompany() {
-        return dropDownInformationCompany.getAttribute("textContent");
+        return ddCompany.shouldBe(exist).getAttribute("textContent");
     }
 
-    public void moveToFormTicketSearch() {
-        Actions actions = new Actions(driver);
-        actions.moveToElement(formTicketSearch).perform();
+    public void hoverFormTicketSearch() {
+        formTicketSearch.scrollIntoView(true).hover();
     }
 
-    public void moveToButtonManageBooking() {
-        Actions actions = new Actions(driver);
-        actions.moveToElement(buttonManageBooking).perform();
-        buttonManageBooking.click();
+    public HomePage hoverManageBooking() {
+        buttonManageBooking.scrollIntoView(true).hover().click();
+        return this;
     }
 
-    public void setInputToFormTicketSearch(String input) {
-        inputToFormTicketSearch.sendKeys(Keys.chord(Keys.CONTROL, "a"));
-        inputToFormTicketSearch.sendKeys(Keys.DELETE);
-        inputToFormTicketSearch.sendKeys(input);
-
-        wait.until(ExpectedConditions.visibilityOf(dropDownToFormTicketSearch));
-
-        inputToFormTicketSearch.sendKeys(Keys.ENTER);
-
-        firstItemDropDownTicketSearch.click();
+    public void setFromCity(String input) {
+        inputFrom.setValue(input).click();
     }
 
-    public void setInputFromFormTicketSearch(String input) {
-        inputFromFormTicketSearch.sendKeys(Keys.chord(Keys.CONTROL, "a"));
-        inputFromFormTicketSearch.sendKeys(Keys.DELETE);
-
-        inputFromFormTicketSearch.sendKeys(input);
-
-        wait.until(ExpectedConditions.visibilityOf(dropDownFromFormTicketSearch));
-
-        inputFromFormTicketSearch.sendKeys(Keys.ENTER);
-        firstItemDropDownTicketSearch.click();
+    public void setToCity(String input) {
+        inputTo.setValue(input).click();
     }
 
-    public void setInputDepartureFormTicketSearch(String input) {
-        inputDepartureFormTicketSearch.clear();
-        inputDepartureFormTicketSearch.sendKeys(input);
+    public void setDepartureDate(String input) {
+        inputDeparture.setValue(input);
     }
 
-    public void setInputReturnFormTicketSearch(String input) {
-        inputReturnFormTicketSearch.clear();
-        inputReturnFormTicketSearch.sendKeys(input);
+    public void setReturnDate(String date) {
+        inputReturn.setValue(date);
     }
 
-    public boolean isDisplayed_inputToFormTicketSearch() {
-        return inputToFormTicketSearch.isDisplayed();
-    }
-
-    public boolean isDisplayed_inputFromFormTicketSearch() {
-        return inputFromFormTicketSearch.isDisplayed();
-    }
-
-    public boolean isDisplayed_inputDepartureFormTicketSearch() {
-        return inputDepartureFormTicketSearch.isDisplayed();
-    }
-
-    public boolean isDisplayed_inputReturnFormTicketSearch() {
-        return inputReturnFormTicketSearch.isDisplayed();
-    }
-
-    public void buttonSearch() {
+    public HomePage clickSearch() {
         buttonSearch.click();
+        return this;
     }
 
-    public boolean isDisplayed_inputClientLastNameManageBooking() {
-        return inputClientLastNameManageBooking.isDisplayed();
+    public boolean isDepartureFieldFailed() {
+        return inputDeparture.parent().shouldHave(attribute("data-failed", "true")).exists();
     }
 
-    public boolean isDisplayed_inputBookingNumberManageBooking() {
-        return inputBookingNumberManageBooking.isDisplayed();
+    public boolean isBookingNumberFailed() {
+        return bookingNumberContainer.shouldHave(attribute("data-failed", "true")).exists();
     }
 
-    public boolean isDisplayed_buttonSearch() {
-        return buttonSearch.isDisplayed();
+    public boolean hasBookingErrorText() {
+        return bookingErrorText.shouldHave(text("Некорректный номер")).exists();
     }
 
-    public void setInputClientLastNameManageBooking(String input) {
-        inputClientLastNameManageBooking.sendKeys(Keys.chord(Keys.CONTROL, "a"));
-        inputClientLastNameManageBooking.sendKeys(Keys.DELETE);
-        inputClientLastNameManageBooking.sendKeys(input);
-        inputClientLastNameManageBooking.sendKeys(Keys.ENTER);
+    public HomePage setClientLastName(String input) {
+        inputClientLastName
+                .shouldBe(visible)
+                .setValue(input)
+                .pressEnter();
+        return this;
     }
 
-    public void setInputBookingNumberManageBooking(String input) {
-        inputBookingNumberManageBooking.sendKeys(Keys.chord(Keys.CONTROL, "a"));
-        inputBookingNumberManageBooking.sendKeys(Keys.DELETE);
-        inputBookingNumberManageBooking.sendKeys(input);
-        inputBookingNumberManageBooking.sendKeys(Keys.ENTER);
+    public HomePage setBookingNumber(String input) {
+        inputBookingNumber
+                .shouldBe(visible)
+                .setValue(input)
+                .pressEnter();
+        return this;
     }
-
-
-    public String getContainerDepartureFormTicketSearchBorderColor() {
-        return wait.until(driver ->
-                "true".equals(containerDepartureFormTicketSearch.getAttribute("data-failed"))
-                        ? containerDepartureFormTicketSearch.getCssValue("border-color")
-                        : null
-        );
-    }
-
-    public boolean containerDepartureFormTicketSearchDataFailed() {
-        return wait.until(driver ->
-                "true".equals(containerDepartureFormTicketSearch.getAttribute("data-failed")) ? true : null
-        );
-    }
-
-    public boolean containerBookingNumberSearchDataFailed() {
-        return wait.until(driver ->
-                "true".equals(containerBookingNumberManageBooking.getAttribute("data-failed")) ? true : null
-        );
-            }
-
-    public boolean isBookingNumberHasErrorText() {
-        return wait.until(driver ->
-                "Некорректный номер".equals(bookingNumberErrorText.getAttribute("textContent")) ? true : null
-        );
-    }
-
-
 }
